@@ -16,7 +16,7 @@
                         <li>安庆</li>
                         <li>安阳</li>
                     </ul>
-                </div>	
+                </div>
             </div>
         </div>
         <div class="city_index">
@@ -44,7 +44,7 @@
                             <ul>
                                 <li v-for="itemList in item.list" :key="itemList.id" @tap="handleToCity(itemList.nm , itemList.id)">{{ itemList.nm }}</li>
                             </ul>
-                        </div>	
+                        </div>
                     </div>
                 </div>
             </Scroller>
@@ -62,23 +62,30 @@ export default {
     name : 'City',
     data(){
         return {
+            // 城市列表
             cityList : [],
+            // 热门城市
             hotList : [],
+            // 加载属性
             isLoading : true
         }
     },
     mounted(){
-
+            // 获取城市列表,热门城市存储到浏览器中
         var cityList = window.localStorage.getItem('cityList');
         var hotList = window.localStorage.getItem('hotList');
 
         if(cityList && hotList){
+            // JSON.parse() 方法用于将一个 JSON 字符串转换为对象。
             this.cityList = JSON.parse(cityList);
             this.hotList = JSON.parse(hotList);
+            // 当数据获取到的时候将加载属性取值为false
             this.isLoading = false;
         }
         else{
+            // 如果浏览器还没有缓存的话就向后台发起请求
             this.axios.get('/api/cityList').then((res)=>{
+                console.log(res)
                 var msg = res.data.msg;
                 if(msg === 'ok'){
                     this.isLoading = false;
@@ -89,6 +96,8 @@ export default {
                     this.hotList = hotList;
                     window.localStorage.setItem('cityList' , JSON.stringify(cityList));
                     window.localStorage.setItem('hotList' , JSON.stringify(hotList));
+                    console.log(cityList)
+                    console.log(hotList)
                 }
             });
         }
@@ -130,7 +139,7 @@ export default {
                 }
             });
 
-           
+
 
             function toCom(firstLetter){
                 for(var i=0;i<cityList.length;i++){

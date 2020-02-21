@@ -1,5 +1,6 @@
 <template>
     <div class="movie_body" ref="movie_body">
+        <!-- //在需要使用到的地方加上该标签,当数据加载完成的时候让他取值为负的 -->
         <Loading v-if="isLoading" />
         <Scroller v-else :handleToScroll="handleToScroll" :handleToTouchEnd="handleToTouchEnd">
             <ul>
@@ -35,7 +36,7 @@
 
 <script>
 
-//import BScroll from 'better-scroll';
+// import BScroll from 'better-scroll';
 
 export default {
     name : 'NowPlaying',
@@ -52,6 +53,8 @@ export default {
         if( this.prevCityId === cityId ){ return; }
         this.isLoading = true;
         this.axios.get('/api/movieOnInfoList?cityId='+cityId).then((res)=>{
+            console.log(res);
+            console.log(111111);
             var msg = res.data.msg;
             if( msg === 'ok' ){
                 this.movieList = res.data.data.movieList;
@@ -62,7 +65,7 @@ export default {
                         tap : true,
                         probeType: 1
                     });
-                    
+
                     scroll.on('scroll',(pos)=>{
                         //console.log('scroll');
                         if( pos.y > 30 ){
@@ -82,15 +85,15 @@ export default {
                                         this.movieList = res.data.data.movieList;
                                         this.pullDownMsg = '';
                                     },1000);
-                                    
+
                                 }
                             });
-                            
+
                         }
                     });
 
                 }); */
-                
+
             }
         });
     },
@@ -108,13 +111,14 @@ export default {
             if( pos.y > 30 ){
                 this.axios.get('/api/movieOnInfoList?cityId=11').then((res)=>{
                     var msg = res.data.msg;
+                    console.log(res.data)
                     if( msg === 'ok' ){
                         this.pullDownMsg = '更新成功';
                         setTimeout(()=>{
                             this.movieList = res.data.data.movieList;
                             this.pullDownMsg = '';
                         },1000);
-                        
+
                     }
                 });
             }
